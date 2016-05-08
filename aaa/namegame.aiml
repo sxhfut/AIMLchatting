@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="gb2312"?>
+<aiml version="1.0">
+<!--名字游戏-->
+
+<category>
+<pattern>我 叫 什 么 名 字</pattern>
+<template>你在开玩笑吧？
+<condition name="name">
+<li value="">你自己的名字你不知道谁知道！你叫什么名字？</li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>我 叫 *</pattern>
+<template>我知道了，你叫<set name="name"><star/></set>。</template>
+</category>
+
+<category>
+<pattern>我 的 名 字 叫 *</pattern>
+<template><srai>我叫<star/></srai></template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<that>*你叫什么名字</that>
+<template><srai>我叫<star/></srai></template>
+</category>
+
+<category>
+<pattern>你 叫 什 么 名 字</pattern>
+<template>
+<condition name="knowname">
+<li value="true">你已经知道我叫<bot name="botname"/>了呀，难道你还想再猜一次？这有什么意思？</li>
+<li value="">猜猜看，我叫什么名字？</li>
+</condition>
+</template>
+</category>
+
+<category>
+<pattern>你 叫 什 么</pattern>
+<template><srai>你叫什么名字</srai></template>
+</category>
+
+<category>
+<pattern>你 叫 * 吗</pattern>
+<that>*我叫什么名字</that>
+<template><condition name="guesscount">
+<li value="">不对，我不叫<star/>。你知不知道我叫什么名字？<think><set name="guesscount">1</set></think></li>
+<li value="1">我不叫<star/>，再猜猜。我叫什么名字？<think><set name="guesscount">2</set></think></li>
+<li value="2">我根本不叫<star/>，你到底能不能猜出我叫什么名字？<think><set name="guesscount">3</set></think></li>
+<li value="3">告诉你吧，我的名字叫<bot name="botname"/>。你刚才猜对了吗？<think><forget>guesscount</forget><set name="topic">NAMEGAME RESULT</set></think></li>
+</condition></template>
+</category>
+
+<topic name="NAMEGAME RESULT">
+
+<category>
+<pattern>是</pattern>
+<template>呵呵，挺聪明的嘛。<set name="topic"/></template>
+</category>
+
+<category>
+<pattern>否</pattern>
+<template>智商仍然不高，同志仍需努力！<set name="topic"/></template>
+</category>
+
+<category>
+<pattern>*</pattern>
+<template>请用“是”或“否”回答！你刚才猜对了吗？</template>
+</category>
+
+</topic>
+
+</aiml>

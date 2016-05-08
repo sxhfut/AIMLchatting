@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+	<category>
+		<pattern>* 邮 件 *</pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 邮 件 </pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+		<category>
+		<pattern>* 写 信 </pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+		<category>
+		<pattern>* 收 信 </pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+			<category>
+		<pattern>写 信 </pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+		<category>
+		<pattern>收 信 </pattern>
+		<template>
+			<random>
+				<li>我知道了，我来打开邮件发送程序。</li>
+				<li>好的，主人。</li>
+				<li>是email吗？</li>
+				<li>知道了，我喜欢用foxmail来收发邮件。</li>
+				<li>ok.</li>
+			</random>
+			<cmd>mailto:</cmd>
+		</template>
+	</category>
+
+	<category>
+		<pattern>* 编 辑 </pattern>
+		<template>
+			<random>
+				<li>是要使用word吧？</li>
+				<li>word是非常常用的工具。</li>
+				<li>MS Word的功能还是很不错的。</li>
+				<li>好的，马上打开</li>
+				<li>我知道了。</li>
+			</random>
+			<cmd>winword.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* word *</pattern>
+		<template>
+			<random>
+				<li>是要使用word吧？</li>
+				<li>word是非常常用的工具。</li>
+				<li>MS Word的功能还是很不错的。</li>
+				<li>好的，马上打开</li>
+				<li>我知道了。</li>
+			</random>
+			<cmd>winword.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* word </pattern>
+		<template>
+			<random>
+				<li>是要使用word吧？</li>
+				<li>word是非常常用的工具。</li>
+				<li>MS Word的功能还是很不错的。</li>
+				<li>好的，马上打开</li>
+				<li>我知道了。</li>
+			</random>
+			<cmd>winword.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>*  编 辑 文 * </pattern>
+		<template>
+			<random>
+				<li>是要使用word吧？</li>
+				<li>word是非常常用的工具。</li>
+				<li>MS Word的功能还是很不错的。</li>
+				<li>好的，马上打开</li>
+				<li>我知道了。</li>
+			</random>
+			<cmd>winword.exe </cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>编 辑 文 * </pattern>
+		<template>
+			<random>
+				<li>是要使用word吧？</li>
+				<li>word是非常常用的工具。</li>
+				<li>MS Word的功能还是很不错的。</li>
+				<li>好的，马上打开</li>
+				<li>我知道了。</li>
+			</random>
+			<cmd>winword.exe </cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* excel</pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* excel *</pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 电 子 表 格  *</pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>*  电 子 表 格 </pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 制 表  *</pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 制 表 </pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>电 子 表 格 </pattern>
+		<template>
+			<random>
+				<li>是要使用excel吧？</li>
+				<li>要做电子表格吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>excel.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>access</pattern>
+		<template>
+			<random>
+				<li>是要使用accessl吧？</li>
+				<li>要做数据库吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>*  access *</pattern>
+		<template>
+			<random>
+				<li>是要使用accessl吧？</li>
+				<li>要做数据库吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>*  access </pattern>
+		<template>
+			<random>
+				<li>是要使用accessl吧？</li>
+				<li>要做数据库吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* ppt *</pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* ppt</pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>幻 灯 片 </pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 幻 灯 片  *</pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 幻 灯 片 </pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>幻 灯 片 </pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>powerpnt.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>词 霸 </pattern>
+		<template>
+			<random>
+				<li>是要使用Power Point吧？</li>
+				<li>要做幻灯片吗？</li>
+				<li>好的马上打开</li>
+				<li>我知道了</li>
+				<li>OK.</li>
+			</random>
+			<cmd>xdict</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 词 霸  </pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>xdict</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 词 霸  *</pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>词 霸 </pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>翻 译 </pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>msaccess.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 翻 译  *</pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>xdict.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 翻 译 </pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>xdict.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>翻 译 *</pattern>
+		<template>
+			<random>
+				<li>要翻译单词吗？</li>
+				<li>要查英文吗？</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>OK.</li>
+			</random>
+			<cmd>xdict.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>记 事 本 </pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 记 事 本  *</pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 记 事 本 </pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>日 记 </pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 日 记  *</pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 日 记 </pattern>
+		<template>
+			<random>
+				<li>记事本是记录文字的小工具</li>
+				<li>记事本的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开记事本。</li>
+			</random>
+			<cmd>notepad</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 计 算 器  *</pattern>
+		<template>
+			<random>
+				<li>计算器是可以用来进行数学计算</li>
+				<li>计算器的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开计算器。</li>
+			</random>
+			<cmd>calc</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern> 计 算 器</pattern>
+		<template>
+			<random>
+				<li>计算器是可以用来进行数学计算</li>
+				<li>计算器的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开计算器。</li>
+			</random>
+			<cmd>calc</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 计 算 器</pattern>
+		<template>
+			<random>
+				<li>计算器是可以用来进行数学计算</li>
+				<li>计算器的使用是很方便的。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开计算器。</li>
+			</random>
+			<cmd>calc</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>画 *</pattern>
+		<template>
+			<random>
+				<li>画板使用简单方便。</li>
+				<li>画板是微软自带的工具。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开画板。</li>
+			</random>
+			<cmd>mspaint</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 画  *</pattern>
+		<template>
+			<random>
+				<li>画板使用简单方便。</li>
+				<li>画板是微软自带的工具。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开画板。</li>
+			</random>
+			<cmd>mspaint</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>任 务 管 理 </pattern>
+		<template>
+			<random>
+				<li>任务管理器可以结束没有响应的进程。</li>
+				<li>任务管理器可以通过Ctrl+Alt+Shift调用。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开任务管理器。</li>
+			</random>
+			<cmd>taskmgr</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 任 务 管 理  *</pattern>
+		<template>
+			<random>
+				<li>任务管理器可以结束没有响应的进程。</li>
+				<li>任务管理器可以通过Ctrl+Alt+Shift调用。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开任务管理器。</li>
+			</random>
+			<cmd>taskmgr</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>任 务 管 理  *</pattern>
+		<template>
+			<random>
+				<li>任务管理器可以结束没有响应的进程。</li>
+				<li>任务管理器可以通过Ctrl+Alt+Shift调用。</li>
+				<li>好的马上打开。</li>
+				<li>我知道了。</li>
+				<li>马上打开任务管理器。</li>
+			</random>
+			<cmd>taskmgr</cmd>
+		</template>
+	</category>  <category>
+    <pattern>* 任 务 管 理  </pattern>
+    <template>
+      <random>
+        <li>任务管理器可以结束没有响应的进程。</li>
+        <li>任务管理器可以通过Ctrl+Alt+Shift调用。</li>
+        <li>好的马上打开。</li>
+        <li>我知道了。</li>
+        <li>马上打开任务管理器。</li>
+      </random>
+      <cmd>taskmgr</cmd>
+    </template>
+  </category>
+  
+          <category>
+    <pattern> * 上 网 聊 天 </pattern>
+    <template>
+      <random>
+        <li>好的我来打开。</li>
+        <li>愿意为您效劳。</li>
+        <li>ok~~~</li>
+        <li>好的，我很高兴为您服务。</li>
+      </random>
+      <cmd>qq</cmd>
+    </template>
+  </category>  
+  
+    <category>
+    <pattern> * 联 众 游 戏 </pattern>
+    <template>
+      <random>
+        <li>好的我来打开。</li>
+        <li>愿意为您效劳。</li>
+        <li>ok~~~</li>
+        <li>好的，我很高兴为您服务。</li>
+      </random>
+      <cmd>qq</cmd>
+    </template>
+  </category>  
+  
+</aiml>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<aiml version="1.0">
+<!--test-->
+
+
+<category>
+<pattern>哈哈</pattern>
+<template>你嘲笑我，我要生气了。</template>
+</category>
+
+<category>
+<pattern>谢谢</pattern>
+<template>没关系。让我们相互帮助吧。</template>
+</category>
+
+</aiml>

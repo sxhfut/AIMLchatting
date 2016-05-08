@@ -1,0 +1,46 @@
+<!--Operator Chat 启动配置文件-->
+<startup>
+<input>
+<!--输入处理-->
+  <!--标点符号-->
+  <substitute find="?" replace=""/>
+  <substitute find="!" replace=""/>
+  <substitute find="。。。" replace="..."/>
+  <substitute find="。" replace=""/>
+  <substitute find="？" replace=""/>
+  <substitute find="！" replace=""/>
+  <substitute find="," replace="，"/>
+  <substitute find=";" replace="；"/>
+  <substitute find="$" replace="￥"/>
+  <substitute find="(" replace="（"/>
+  <substitute find=")" replace="）"/>
+  <!--句子处理-->
+  <substitute find="吧" replace=""/>
+  <substitute find="呢" replace=""/>
+  <substitute find="您" replace="你"/>
+  <substitute find="啥" replace="什么"/>
+  <substitute find="拜拜" replace="再见"/>
+  <substitute find="88" replace="再见"/>
+  <substitute find="我要走了" replace="再见"/>
+  <substitute find="下线了" replace="再见"/>
+</input>
+
+<sentence-splitters>
+  <!--标点分割符-->
+  <splitter value="，"/>
+  <splitter value="；"/>
+  <splitter value="“"/>
+  <splitter value="”"/>
+</sentence-splitters>
+
+<bot id="ChatBot" enabled="true">
+<!--机器人定义-->
+
+  <property name="botname" value="笨笨"/>
+  <!--如果您在 pattern 中使用了机器人属性，您应该在加载 AIML 文件之前设置它们-->
+
+  <!--载入 AIML 文件-->
+  <learn>aiml/*.aiml</learn>
+  <learn>aiml/*.aiml</learn>
+</bot>
+</startup>

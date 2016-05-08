@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+	<category>
+		<pattern>新 闻 </pattern>
+		<template>
+			<random>
+				<li>看看有没有什么新闻。</li>
+			</random>
+			<cmd>http://www.xinhuanet.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 新 闻  *</pattern>
+		<template>
+			<random>
+				<li>看看有没有什么新闻。</li>
+				<li>新华网是国内比较权威的新闻网站。</li>
+			</random>
+			<cmd>http://www.xinhuanet.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 新 闻 </pattern>
+		<template>
+			<random>
+				<li>看看有没有什么新闻。</li>
+				<li>新华网是国内比较权威的新闻网站。</li>
+			</random>
+			<cmd>http://www.xinhuanet.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>体 育 </pattern>
+		<template>
+			<random>
+				<li>来看看新浪的体育栏目。</li>
+				<li>看看比赛情况吧。</li>
+				<li>你喜欢什么体育项目？来新浪看看。</li>
+				<li>我喜欢足球。</li>
+				<li>看看有没有姚明的消息。</li>
+			</random>
+			<cmd>http://sports.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 体 育  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的体育栏目。</li>
+				<li>看看比赛情况吧。</li>
+				<li>你喜欢什么体育项目？来新浪看看。</li>
+				<li>我喜欢足球。</li>
+				<li>看看有没有姚明的消息。</li>
+			</random>
+			<cmd>http://sports.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 体 育 新 闻  </pattern>
+		<template>
+			<random>
+				<li>来看看新浪的体育栏目。</li>
+				<li>看看比赛情况吧。</li>
+				<li>你喜欢什么体育项目？来新浪看看。</li>
+				<li>我喜欢足球。</li>
+				<li>看看有没有姚明的消息。</li>
+			</random>
+			<cmd>http://sports.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>体 育  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的体育栏目。</li>
+				<li>看看比赛情况吧。</li>
+				<li>你喜欢什么体育项目？来新浪看看。</li>
+				<li>我喜欢足球。</li>
+				<li>看看有没有姚明的消息。</li>
+			</random>
+			<cmd>http://sports.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>娱 乐 </pattern>
+		<template>
+			<random>
+				<li>来看看新浪的娱乐栏目。</li>
+				<li>看看有什么消息</li>
+			</random>
+			<cmd>http://ent.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 娱 乐  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的娱乐栏目。</li>
+				<li>看看有什么消息</li>
+			</random>
+			<cmd>http://ent.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>娱 乐  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的娱乐栏目。</li>
+				<li>看看有什么消息</li>
+			</random>
+			<cmd>http://ent.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 娱 乐  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的娱乐栏目。</li>
+				<li>看看有什么消息</li>
+			</random>
+			<cmd>http://ent.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 军 事  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的军事栏目。</li>
+				<li>看看有什么消息</li>
+				<li>钓鱼岛是中国领土。</li>
+				<li>舰船知识是很专业的军事论坛。</li>
+				<li>瞧瞧。</li>
+			</random>
+			<cmd>http://jczs.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>军 事 </pattern>
+		<template>
+			<random>
+				<li>来看看新浪的军事栏目。</li>
+				<li>看看有什么消息</li>
+				<li>钓鱼岛是中国领土。</li>
+				<li>舰船知识是很专业的军事论坛。</li>
+				<li>瞧瞧。</li>
+			</random>
+			<cmd>http://jczs.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 军 事  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的军事栏目。</li>
+				<li>看看有什么消息</li>
+				<li>钓鱼岛是中国领土。</li>
+				<li>舰船知识是很专业的军事论坛。</li>
+				<li>瞧瞧。</li>
+			</random>
+			<cmd>http://jczs.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 军 事 </pattern>
+		<template>
+			<random>
+				<li>来看看新浪的军事栏目。</li>
+				<li>看看有什么消息</li>
+				<li>钓鱼岛是中国领土。</li>
+				<li>舰船知识是很专业的军事论坛。</li>
+				<li>瞧瞧。</li>
+			</random>
+			<cmd>http://jczs.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>军 事  *</pattern>
+		<template>
+			<random>
+				<li>来看看新浪的军事栏目。</li>
+				<li>看看有什么消息</li>
+				<li>钓鱼岛是中国领土。</li>
+				<li>舰船知识是很专业的军事论坛。</li>
+				<li>瞧瞧。</li>
+			</random>
+			<cmd>http://jczs.sina.com.cn/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>搜 索 </pattern>
+		<template>
+			<random>
+				<li>google是最好用的搜索引擎，将你要找的内容的关键词输入然后点搜索。</li>
+			</random>
+			<cmd>http://www.google.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 搜 索  *</pattern>
+		<template>
+			<random>
+				<li>google是最好用的搜索引擎，将你要找的内容的关键词输入然后点搜索。</li>
+			</random>
+			<cmd>http://www.google.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 搜 索 </pattern>
+		<template>
+			<random>
+				<li>google是最好用的搜索引擎，将你要找的内容的关键词输入然后点搜索。</li>
+			</random>
+			<cmd>http://www.google.com/</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>搜 索  *</pattern>
+		<template>
+			<random>
+				<li>google是最好用的搜索引擎，将你要找的内容的关键词输入然后点搜索。</li>
+			</random>
+			<cmd>http://www.google.com/</cmd>
+		</template>
+	</category>  <category>
+    <pattern>*  从 网 上 收 信 </pattern>
+    <template>
+      <random>
+        <li>我来帮你打开。</li>
+      </random>
+      <cmd>http://freemail.sina.com.cn</cmd>
+    </template>
+  </category>
+</aiml>

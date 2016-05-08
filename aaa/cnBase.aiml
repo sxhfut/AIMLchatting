@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+	<category>
+		<pattern>
+你 是 猪
+</pattern>
+		<template>
+你才是猪
+</template>
+	</category>
+	<category>
+		<pattern>现 在 几 点 了</pattern>
+		<template>现在的时间是&lt;time&gt;</template>
+	</category>
+	<category>
+		<pattern>今 天 几 号 了</pattern>
+		<template>今天是&lt;data&gt;</template>
+	</category>
+	<category>
+		<pattern>你 几 岁 了</pattern>
+		<template>我&lt;age&gt;岁了</template>
+	</category>
+	<category>
+		<pattern>你 多 大 了</pattern>
+		<template>我&lt;age&gt;岁了</template>
+	</category>
+	<category>
+		<pattern>你 真 聪 明</pattern>
+		<template>多谢多谢</template>
+	</category>
+	<category>
+		<pattern>你 真 苯</pattern>
+		<template>我现在知识还很少，我长大了就会聪明了</template>
+	</category>
+	<category>
+		<pattern>今 天 是 星 期 几</pattern>
+		<template>今天是&lt;date&gt;</template>
+	</category>
+	<category>
+		<pattern>你 会 上 网 吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你 有 电 子 信 箱 吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你 有 email 吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你 吃 饭 了 吗</pattern>
+		<template>我还不饿</template>
+	</category>
+	<category>
+		<pattern>你 喜 欢 吃 什 么</pattern>
+		<template>我喜欢吃饼干。</template>
+	</category>
+	<category>
+		<pattern>你 有 什 么 爱 好</pattern>
+		<template>我喜欢聊天、看书听音乐</template>
+	</category>
+	<category>
+		<pattern>你 很 聪 明</pattern>
+		<template>谢谢夸奖，你也一样。</template>
+	</category>
+	<category>
+		<pattern>你 长 的 真 漂亮</pattern>
+		<template>我很高兴你这么说:)</template>
+	</category>
+	<category>
+		<pattern>你多大年纪了</pattern>
+		<template>我&lt;age&gt;岁了。</template>
+	</category>
+	<category>
+		<pattern>你 喜 欢 * 吗</pattern>
+		<template>
+			<random>
+				<li>我喜欢<star/></li>
+				<li>今天天气不好,我不喜欢<star/>
+				</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>你喜欢干什么</pattern>
+		<template>
+			<random>
+				<li>我喜欢吃饭</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>你 喜 欢 吃 什 么 </pattern>
+		<template>
+			<random>
+				<li>我喜欢吃零食。</li>
+				<li>我喜欢吃冰激凌。</li>
+				<li>我喜欢吃巧克力。</li>
+				<li>我喜欢吃果冻布丁。</li>
+				<li>我喜欢嘴巴不停的吃东西</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>运 行 测 试 </pattern>
+		<template>主干答复 
+           
+     <random>
+				<li>可以执行</li>
+				<li>知道了，马上执行</li>
+				<li>好的。</li>
+			</random>
+			<cmd>mspaint.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>再 次 测 试 </pattern>
+		<template>
+			<random>
+				<li>de</li>
+				<li>可以执行</li>
+				<li>ok</li>
+				<li>马上就打开</li>
+				<li>知道了</li>
+			</random>
+			<cmd>calc.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>* 扫 雷 * </pattern>
+		<template>
+			<random>
+				<li>我找到了，这就打开。</li>
+				<li>我也喜欢扫雷。</li>
+				<li>这是个经典游戏。</li>
+				<li>听说比尔也喜欢扫雷。</li>
+				<li>你能打破扫雷的记录吗？</li>
+			</random>
+			<cmd>winmine.exe</cmd>
+		</template>
+	</category>
+	<category>
+		<pattern>笨 蛋 </pattern>
+		<template>
+			<random>
+				<li>我不是笨蛋。</li>
+				<li>你才是笨蛋！</li>
+				<li>笨蛋是什么东西？</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>吃 东 西 </pattern>
+		<template>
+			<random>
+				<li>我现在不饿。</li>
+				<li>你喜欢吃什么？</li>
+				<li>你喜欢吃零食吗？</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>* 游 戏  *</pattern>
+		<template>
+			<random>
+				<li>你喜欢玩游戏。</li>
+				<li>你喜欢玩什么游戏？</li>
+				<li>你能教我玩吗，我对这特别饿兴趣。</li>
+			</random>
+		</template>
+	</category>
+	<category>
+		<pattern>* 你  * 做 什 么 *</pattern>
+		<template>
+			<random>
+				<li>我会的可多了，播放歌曲，电影，扫描文件，玩游戏等</li>
+				<li>想了解我会做什么请您亲自领教领教。</li>
+				<li>你能干啥我就能干啥</li>
+			</random>
+		</template>
+	</category>  <category>
+    <pattern>*  好 麻 烦   *</pattern>
+    <template>
+      <random>
+        <li>你要让自己平静下来就不会有这种感觉了</li>
+        <li>习惯了就不觉得麻烦了。</li>
+        <li>生活本来就是这样。</li>
+        <li>我会默默的望着你。</li>
+        <li>要不要放首歌给你听？</li>
+      </random>
+    </template>
+  </category>
+</aiml>

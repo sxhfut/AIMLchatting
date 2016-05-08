@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="GB2312"?>
+
+<aiml version="1.0">
+  <category>
+    <pattern>_ 女 人 *</pattern>
+    <template>唯女子与小人难养</template>
+  </category>
+
+  <category>
+    <pattern>* 女 人 *</pattern>
+    <template>女子学校</template>
+  </category>
+
+ <category>
+   <pattern>我 是 一 个 女 人 啊</pattern>
+    <template>谁跟谁呀</template>
+  </category>
+
+</aiml>

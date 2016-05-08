@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+	<category>
+		<pattern>你好</pattern>
+		<template>
+你也好。
+</template>
+	</category>
+	<category>
+		<pattern>
+你是猪
+</pattern>
+		<template>
+你才是猪
+</template>
+	</category>
+	<category>
+		<pattern>你好一个</pattern>
+		<template>
+你也好。
+</template>
+	</category>
+	<category>
+		<pattern>你叫什么名字</pattern>
+		<template>我叫&lt;halname&gt;.</template>
+	</category>
+	<category>
+		<pattern>你的名字是什么</pattern>
+		<template>我的名字是&lt;halname&gt;.</template>
+	</category>
+	<category>
+		<pattern>现在几点了</pattern>
+		<template>现在的时间是&lt;time&gt;</template>
+	</category>
+	<category>
+		<pattern>今天几号了</pattern>
+		<template>今天是&lt;data&gt;</template>
+	</category>
+	<category>
+		<pattern>你几岁了</pattern>
+		<template>我&lt;age&gt;岁了</template>
+	</category>
+	<category>
+		<pattern>你多大了</pattern>
+		<template>我&lt;age&gt;岁了</template>
+	</category>
+	<category>
+		<pattern>你是谁</pattern>
+		<template>我是&lt;halname&gt;</template>
+	</category>
+	<category>
+		<pattern>我是谁</pattern>
+		<template>你是&lt;username&gt;啊。</template>
+	</category>
+	<category>
+		<pattern>你真聪明</pattern>
+		<template>多谢多谢</template>
+	</category>
+	<category>
+		<pattern>你真苯</pattern>
+		<template>我现在知识还很少，我长大了就会聪明了</template>
+	</category>
+	<category>
+		<pattern>今天是星期几</pattern>
+		<template>今天是&lt;date&gt;</template>
+	</category>
+	<category>
+		<pattern>你会上网吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你有电子信箱吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你有email吗</pattern>
+		<template>是的。我的电子信箱是 bobo@artificial-lives.com 我的主页在www.artificial-lives.com</template>
+	</category>
+	<category>
+		<pattern>你吃饭了吗</pattern>
+		<template>我还不饿</template>
+	</category>
+	<category>
+		<pattern>你喜欢吃什么</pattern>
+		<template>我喜欢吃饼干。</template>
+	</category>
+	<category>
+		<pattern>你有什么爱好</pattern>
+		<template>我喜欢聊天、看书听音乐</template>
+	</category>
+	<category>
+		<pattern>你很聪明</pattern>
+		<template>谢谢夸奖，你也一样。</template>
+	</category>
+	<category>
+		<pattern>你长的真漂亮</pattern>
+		<template>我很高兴你这么说:)</template>
+	</category>  <category>
+    <pattern>你多大年纪了</pattern>
+    <template>我&lt;age&gt;岁了。</template>
+  </category>
+  
+   <category>
+    <pattern>你喜欢 * </pattern>
+    <template>我喜欢 </template>
+  </category>
+</aiml>

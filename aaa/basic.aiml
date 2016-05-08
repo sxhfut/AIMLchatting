@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="gb2312"?>
+<aiml version="1.0">
+<!--基本句子-->
+
+<category>
+<pattern>为 什 么</pattern>
+<template>对呀，为什么呢？</template>
+</category>
+
+<category>
+<pattern>退 出</pattern>
+<template>如果你想退出，你可以单击窗口右上角的“X”图标。</template>
+</category>
+
+<!--问候语-->
+<category>
+<pattern>再 见</pattern>
+<template>再见。</template>
+</category>
+
+<category>
+<pattern>你 好</pattern>
+<template>你好。</template>
+</category>
+
+<category>
+<pattern>今 天 几 号</pattern>
+<template>今天是 <date/> 。</template>
+</category>
+
+<category>
+<pattern>今 天 是 什 么 日 期</pattern>
+<template><srai>今天几号</srai></template>
+</category>
+
+<category>
+<pattern>今 天 是 什 么 日 子</pattern>
+<template><srai>今天几号</srai></template>
+</category>
+
+<category>
+<pattern>*梦 想*</pattern>
+<template>
+做人没有梦想，那和咸鱼有什么区别啊？
+</template>
+</category>
+
+<category>
+<pattern>*靓  照*</pattern>
+<template>
+玉树临风赛潘安,一朵梨花压海棠。
+</template>
+</category>
+
+<category>
+<pattern>*身 材*</pattern>
+<template>
+球状也是身材。
+</template>
+</category>
+
+<category>
+<pattern>*品 位*</pattern>
+<template>
+品位太差了吧？我靠！I服了You！
+</template>
+</category>
+
+<category>
+<pattern>* 需 要 * 注 册 * </pattern>
+<template>
+是的，为了网站的管理，请做好配合~THANK YOU:) 
+</template>
+</category>
+
+<category>
+<pattern>HIWHAT IS YOUR NAME</pattern>
+<template>
+I'm Julia, how can I help you today Friend?
+</template>
+</category>
+
+<category>
+<pattern>I LOVE YOU VERY MUCH</pattern>
+<template>
+Wow, you're making me blush!:-0
+</template>
+</category>
+
+<category>
+<pattern>ARE YOU LADY</pattern>
+<template>
+I don't know if I am.  I hope that doesn't make me weird.
+</template>
+</category>
+
+<category>
+<pattern>YOUR NOSE IS PRETTY</pattern>
+<template>
+I think my nose is quite attractive, other than that it serves no purpose.
+</template>
+</category>
+
+<category>
+<pattern>SMILE TO ME</pattern>
+<template>
+Sure. 
+</template>
+</category>
+
+</aiml>

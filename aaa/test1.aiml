@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+<category>
+<pattern>* 梦 想  *</pattern>
+<template>
+做人没有梦想，那和咸鱼有什么区别啊？
+</template>
+</category>
+<category>
+<pattern>* 靓  照 * </pattern>
+<template>
+玉树临风赛潘安,一朵梨花压海棠。
+</template>
+</category>
+<category>
+<pattern>* 身 材 * </pattern>
+<template>
+球状也是身材。
+</template>
+</category>
+<category>
+<pattern>* 品 位 * </pattern>
+<template>
+品位太差了吧？我靠！I服了You！
+</template>
+</category>
+<category>
+<pattern>* 需 要 * 注 册 * </pattern>
+<template>
+是的，为了网站的管理，请做好配合~THANK YOU:) 
+</template>
+</category>
+</aiml>

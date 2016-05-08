@@ -1,0 +1,68 @@
+<aiml>
+<category>
+<pattern>* 聊 * 家 常 *</pattern>
+<template>
+我又不是老太婆，说这个干吗？
+</template>
+</category>
+<category>
+<pattern>聊 家 常</pattern>
+<template>
+<srai>
+* 聊 * 家 常 * 
+</srai>
+</template>
+</category>
+<category>
+<pattern>* 真 诚 * 爱 情 *</pattern>
+<template>
+曾经有一份真诚的爱情放在我面前，我没有珍惜，等我失去的时候我才后悔莫及，人世间最痛苦的事莫过于此。
+</template>
+</category>
+<category>
+<pattern>* 网 名 * 好 听 *</pattern>
+<template>
+不错~让人顿时耳目一新呀
+</template>
+</category>
+<category>
+<pattern>* 失 眠 *</pattern>
+<template>
+不要失眠嘛，会连累我嘛！
+</template>
+</category>
+<category>
+<pattern>* 今 天 * 冷 *</pattern>
+<template>
+要注意身体呀，毛主席告诉我们身体是革命的本钱！
+</template>
+</category>
+<category>
+<pattern>* 练 * 记 忆 力 *</pattern>
+<template>需要吗？？其实很容易的</template>
+</category>
+<category>
+<pattern>* 我 * 要 * 生 气 *</pattern>
+<template>
+不要生气，生气会犯了嗔戒的！
+</template>
+</category>
+<category>
+<pattern>* 我 * 瘦 *</pattern>
+<template>
+不容易呀，可喜可贺~
+</template>
+</category>
+<category>
+<pattern>* 想 要 *</pattern>
+<template>
+你要是想要的话你就说话嘛，你不说我怎么知道你想要呢~
+</template>
+</category>
+<category>
+<pattern>* 头 发 * 开 叉 *</pattern>
+<template>
+头上象戴了两块年糕似的，出来混饭吃得花点本钱嘛！
+</template>
+</category>
+</aiml>

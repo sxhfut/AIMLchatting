@@ -1,0 +1,2310 @@
+包括：
+  OperatorChat：
+  UDebug.pas：Debug窗体，调用UAIMLLoader,UTemplateprocessor, UBotLoader，UPatternMatcher, UVariables
+  UPatternMatcher.pas：模式匹配（Graphmaster），调用uUtils
+  UAIMLLoader.pas：装载AIML,调用UPatternMatcher,LibXmlParser
+  UVariables.pas：变量处理，调用UPatternMatcher
+  UTemplateProcessor.pas：模板处理，调用LibXMLParser,UPatternMatcher,classes,UElementFactory
+  UElementFactory.pas：元素工厂，调用LibXMLParser,UPatternMatcher,classes
+  UElements.pas：元素对象，调用                 UElementFActory,UPatternMatcher,UVariables,UAIMLLoader,UTemplateProcessor,
+                 LibXMLParser,SysUtils,classes,UUtils;
+  UChat.pas：聊天窗口（用户界面），调用UBotloader,UUtils
+  UBotLoader.pas：装载bot,调用LibXMLParser,UAIMLLoader,classes, UPAtternMatcher
+  ULogging.pas：日志文件处理，UChat,SysUtils
+  UUtils.pas：常用工具
+-----------------------------------------------------------------------------------
+program OperatorChat;
+
+uses
+  Forms,
+  UDebug in 'UDebug.pas' {DebugForm},
+  UPatternMatcher in 'UPatternMatcher.pas',
+  UAIMLLoader in 'UAIMLLoader.pas',
+  UVariables in 'UVariables.pas',
+  UTemplateProcessor in 'UTemplateProcessor.pas',
+  UElementFactory in 'UElementFactory.pas',
+  UElements in 'UElements.pas',
+  UChat in 'UChat.pas' {Chat},
+  UBotLoader in 'UBotLoader.pas',
+  ULogging in 'ULogging.pas',
+  UUtils in 'UUtils.pas';
+
+{$R *.RES}
+begin
+
+
+  Application.Initialize;
+
+  Log:=TLog.Create;
+  PatternMatcher:=TPatternMatcher.Create;
+  TemplateProcessor:=TTemplateProcessor.Create;
+  Memory:=Tmemory.create;
+  AIMLLoader:=TAIMLLoader.create;
+  BotLoader:=TBotLoader.Create;
+  Preprocessor:=TSimpleSubstituter.create;
+  //ElementFactory:=TElementFactory.Create; {auto create when loading units}
+  //TBotloaderThread.Create(false);
+
+  Application.Title := 'PASCALice';
+  Application.CreateForm(TChat, Chat);
+  Application.CreateForm(TDebugForm, DebugForm);
+  Application.Run;
+
+
+  PatternMatcher.Free;
+  TemplateProcessor.Free;
+
+  Memory.Free;
+  AIMLLoader.Free;
+  BotLoader.Free;
+  ElementFactory.Free;
+  log.Free;
+  preprocessor.Free;
+
+end.
+
+-----------------------------------------------------------------------------------------
+unit UDebug;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  UPatternMatcher, StdCtrls, ComCtrls, UVariables;
+
+type
+  TDebugForm = class(TForm)
+    Edit1: TEdit;
+    Memo1: TMemo;
+    Label1: TLabel;
+    Button3: TButton;
+    Button4: TButton;
+    Button5: TButton;
+    edName: TEdit;
+    Label2: TLabel;
+    edValue: TEdit;
+    Label3: TLabel;
+    Button2: TButton;
+    Button6: TButton;
+    ListBox1: TListBox;
+    Button7: TButton;
+    Button8: TButton;
+    procedure FormCreate(Sender: TObject);
+    procedure Button2Click(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure Button7Click(Sender: TObject);
+    procedure Button6Click(Sender: TObject);
+    procedure Button8Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  DebugForm: TDebugForm;
+
+implementation
+
+uses UAIMLLoader,UTemplateprocessor, UBotLoader;
+
+
+
+{$R *.DFM}
+
+procedure TDebugForm.FormCreate(Sender: TObject);
+begin
+  ListBox1.Items:=memory.vars;
+end;
+
+procedure TDebugForm.Button2Click(Sender: TObject);
+begin
+  Memory.setVar(edName.text,edValue.text);
+  ListBox1.Items:=Memory.vars;
+end;
+
+procedure TDebugForm.Button3Click(Sender: TObject);
+var m:THeapStatus;
+begin
+m:=GetHeapStatus;
+Label1.Caption:='Free:'+inttostr(m.TotalFree)+'  patterns:'+InttoStr(PatternMatcher._count);
+end;
+
+procedure TDebugForm.Button4Click(Sender: TObject);
+var
+  M:TMatch;
+  i:integer;
+begin
+Memory.setvar('input',edit1.Text);
+M:=PatternMatcher.match;
+if m._template='' then
+  Memo1.Lines.Add('No match')
+else begin
+  Memo1.Lines.Add('Pattern:'+M._path);
+  for i:=1 to m.count(0) do
+    Memo1.Lines.Add('star '+inttostr(i)+ ':'+ M.get(0,i));
+  for i:=1 to m.count(1) do
+    Memo1.Lines.Add('thatstar '+inttostr(i)+ ':'+ M.get(1,i));
+  for i:=1 to m.count(2) do
+    Memo1.Lines.Add('topicstar '+inttostr(i)+ ':'+ M.get(2,i));
+  Memo1.Lines.Add('------------');
+  Memo1.Lines.Add(m._template);
+  Memo1.Lines.Add('------------');
+  Memo1.Lines.Add(TemplateProcessor.Process(m));
+  Memo1.Lines.Add('------------');
+end;
+m.Free;
+end;
+
+procedure TDebugForm.Button5Click(Sender: TObject);
+//var
+//  loader:TBotLoader;
+begin
+  TBotloaderThread.Create(false);
+end;
+
+procedure TDebugForm.Button7Click(Sender: TObject);
+begin
+  Memory.setProp(edName.text,edValue.text);
+  ListBox1.Items:=Memory.vars;
+end;
+
+procedure TDebugForm.Button6Click(Sender: TObject);
+begin
+  edValue.Text:=Memory.getVar(edName.Text);
+end;
+
+procedure TDebugForm.Button8Click(Sender: TObject);
+begin
+  edValue.Text:=Memory.getProp(edName.Text);
+end;
+
+end.
+
+-------------------------------------------------------------------------------
+{Here resides the 'Graphmaster' of PASCALice, used to store & match the
+ loaded AIML}
+
+unit UPatternMatcher;
+
+interface
+uses classes,uUtils;
+const
+{these constants will be made into a separate class for handling user
+ defined contexts}
+  CNumContext=3;
+  CContext:array[0..CNumContext-1] of string=
+    ('<INPUT>','<THAT>','<TOPIC>');
+type
+{TContexts maintains a list of contexts, their order and variable bindings}
+  TContexts=class
+  end;
+  
+{TMatch stores information about a match, such as matched wildcards,
+ or the resulting template}
+  TMatch=class
+    _m:array of array of string; {array for handling user defined context matches}
+    _template:string;            {the activated category's template}
+    _processed:string;           {the processed template}
+    _path:string;                {the path of the activated category}
+    _fifo:boolean;               {behaviour of get method}
+    constructor create;
+    procedure add(context:integer;s:string);  {adds a matched wildcard of a context}
+    function get(context:integer;i:integer):string;overload;
+    function count(context:integer):integer;   {the number of 'stars' in the context}
+    {function get(context:integer):string);overload;}
+
+  end;
+  TPatternNode=class
+    _pattern:string;           {the word this node represents, can be a wildcard or a context separator}
+    _context:integer;          {the id of the context}
+    _template:string;          {if this node is a leaf node, contains the template}
+    _path:string;              {if leaf node, then it's the path to the category it represents}
+    //_file:string;
+    _parent:TPatternNode;      {not currently used}
+    _childs:array of TStringList; {list of childcontexts, will probably need replacing by custom container}
+    _count:array of integer;      {number of childnodes in each context}
+    constructor create(pattern:string;parent:TPatternNode);
+
+    //function add(n:TPatternNode):TPatternNode;overload; {not used; adds already created node object}
+    //function add(p:String):TPatternNode;overload; {not used; adds node without context id}
+    function add(p:String;context:integer):TPatternNode;overload; {creates and adds a node if there isn't one already present}
+
+    {matches the tokens in input from token number depth, if sucessfull returns the matched childnode}
+    function match(input:TStringList;depth:integer;var m:TMatch):TPatternNode;
+    Procedure delete(context:integer;i:integer); {delete &free child node i}
+    Procedure clear;             {free all child nodes recursively}
+    function contains(context:integer;p:string):integer; {returns index of child node with the pattern p}
+    //function get(i:integer):TpatternNode;overload; {returns child node i}
+    //function get(p:string):TpatternNode;overload;  {returns child node with pattern p}
+
+    function get(context:integer; i:integer):TPatternNode;overload;
+    function get(context:integer;p:string):TPatternNode;overload;
+
+  end;
+
+  TPatternMatcher=class
+    _root:TPatternNode;
+    _tokenizer:TStringTokenizer;
+    _SentenceTokenizer:TStringTokenizer;
+    _count:integer;
+    _locked:boolean;
+    _matchfault:integer;
+    procedure add(path:string;t:string);
+    function match:TMatch;overload;
+    function match(path:string):TMatch;overload;
+    function match(input,that,topic:string):TMatch;overload;
+    function matchinput(input:string):TMatch;
+    constructor Create;
+    destructor destroy;override;
+  end;
+var
+  PatternMatcher:TPatternMatcher;
+  Nodecount:integer;
+implementation
+  uses SysUtils,UVariables;
+  var matchfault:integer;
+  constructor TMatch.create;
+    var
+      i:integer;
+    begin
+      _fifo:=false;
+      _template:='';
+      Setlength(_m,CNumContext);
+      for i:=0 to CNumContext-1 do
+        _m[i]:=nil
+    end;
+  procedure TMatch.Add(context:integer;s:string);
+    begin
+      setlength(_m[context],Length(_m[context])+1);
+      _m[context,length(_m[context])-1]:=s;
+    end;
+  function TMatch.count(context:integer):integer;
+    begin
+      if (_m[context]=nil)or (context>=Cnumcontext) then
+        result:=0
+      else
+        result:=length(_m[context]);
+    end;
+  function TMatch.get(context:integer;i:integer):string;
+    begin
+      if count(context)<i then begin
+        result:='';
+        exit;
+      end;
+      if _fifo then dec(i)
+      else i:=count(context)-i;
+
+      result:=_m[context,i];
+    end;
+  constructor TPatternNode.Create(pattern:string;parent:TPatternNode);
+    begin
+      _pattern:=pattern;
+      _parent:=parent;
+      _template:='';
+      SetLength(_childs,CNumContext);
+      SetLength(_count,CNumContext);
+      inc(nodecount);
+    end;
+  function TPatternNode.Contains(context:integer;p:string):integer;
+    begin
+      if _childs[context]<>nil then
+        result:=_childs[context].IndexOf(p)
+      else
+        result:=-1;
+    end;
+
+
+  function TPatternNode.get(context:integer;i:integer):TPatternNode;
+    begin
+      if i>=_Count[context] then result := nil else
+        result:=TPatternnode(_childs[context].Objects[i]);
+    end;
+  function TPatternNode.get(context:integer;p:string):TPatternNode;
+    var i:integer;
+    begin
+      if _count[context]=0 then begin
+        result:=nil;
+        exit;
+      end;
+      I:=_childs[context].indexof(p);
+      if i>=0 then result:=TPatternNode(_Childs[context].Objects[i])
+      else result:=nil;
+
+    end;
+(*
+  function TPatternNode.Add(n:TPatternNode):TPatternNode;
+    var
+      i:integer;
+    begin
+      if _childs=nil then begin
+        _childs:=TStringList.Create;
+        _childs.sorted:=true;
+        _childs.duplicates:=dupIgnore;
+      end;
+      i:=_childs.indexof(n._pattern);
+      if i<0 then begin
+        _childs.AddObject(n._pattern,n);
+        result:=n;
+      end else begin
+        result:=TPatternNode(_childs.Objects[i]);
+        n.Destroy;
+      end;
+      _count:=_childs.count;
+    end;
+*)
+(*
+  function TPatternNode.Add(p:string):TPatternNode;
+    var
+      i:integer;
+      n:TPatternnode;
+    begin
+      if _childs=nil then begin
+        _childs:=TStringList.Create;
+        _childs.sorted:=true;
+        _childs.duplicates:=dupIgnore;
+      end;
+
+      i:=_childs.indexof(p);
+      if i<0 then begin {create new child node}
+        n:=TPatternNode.create(p,self);
+        _childs.AddObject(p,n);
+        result:=n;
+      end else begin {this node already exists, just return it}
+        result:=TPatternNode(_childs.Objects[i]);
+      end;
+      _count:=_childs.count;
+    end;
+*)
+  function TPatternNode.Add(p:string;context:integer):TPatternNode;
+    var
+      i:integer;
+      n:TPatternnode;
+    begin
+      if _childs[context]=nil then begin
+        _childs[context]:=TStringList.Create;
+        _childs[context].sorted:=true;
+        _childs[context].duplicates:=dupIgnore;
+      end;
+
+      i:=_childs[context].indexof(p);
+      if i<0 then begin {create new child node}
+        n:=TPatternNode.create(p,self);
+        _childs[context].AddObject(p,n);
+        result:=n;
+      end else begin {child node already exists}
+        result:=TPatternNode(_childs[context].Objects[i]);
+      end;
+      result._context:=context;
+      _count[context]:=_childs[context].count;
+    end;
+  function TPatternNode.match(input:TStringList;depth:integer;var m:TMatch):TPatternNode;
+    var
+      n:TPatternNode;
+      i:integer;
+      wcl:integer; {number of words in the current wildcard, starting from depth}
+      wc:string; {matched wildcard}
+      newcontext:integer;
+    begin
+      inc(matchfault);
+      result:=nil;
+      wcl:=0;
+      wc:='';
+      {check current context from input (get the variable bound to the context if we've reached the end)}
+      newcontext:=_context;
+      for i:=_context to CNumContext-1 do
+        if ansisametext(input[depth],CContext[i]) then begin
+          newcontext:=i;
+          break;
+        end;
+      if _count[newcontext]=0 then begin
+        result:=nil;
+        exit;
+      end;
+      n:=get(newcontext,'_');
+      {try to match the underscore wildcard}
+      if (n<>nil) then begin
+        repeat {try to match words with the wildcard}
+          if (depth+wcl<input.Count-1) then
+            result:=n.Match(input,depth+wcl+1,m) {we haven't reached the end of the input, and there's still childnodes to try}
+          else if n._template<>'' then
+            result:=n; {we've found a category}
+          inc(wcl);
+        until (result<> nil) or (depth+wcl>=input.Count); {until we match or we reach end of input}
+        if result<> nil then begin {if we matched}
+          if m=nil then m.create;  {just in case this is the first match}
+          for i:=depth to depth+wcl-1 do
+            wc:=wc+input[i]+' '; {construct the individual words into the matched wildcard}
+          m.add(_context,wc); {add the matched wildcard to the match using the current context}
+          exit;
+        end;
+      end;
+
+      {try to match the exact word}
+      n:=get(newcontext,input[depth]);
+      if n<>nil then begin
+        if depth<input.Count-1 then {check if we aren't at the last word in the input}
+          result:=n.Match(input,depth+1,m)
+        else if n._template<>'' then
+          result:=n;
+        if result<> nil then exit;
+      end;
+
+      wcl:=0;
+      n:=get(newcontext,'*');
+      {try to match the * wildcard}
+      if n<>nil then begin
+        repeat
+          if (depth+wcl<input.Count-1) then
+            result:=n.Match(input,depth+wcl+1,m)
+          else if n._template<>'' then
+            result:=n;
+          inc(wcl);
+        until (result<> nil) or (depth+wcl>=input.Count);
+        if result<>nil then begin
+          if m=nil then m.create;
+          for i:=depth to depth+wcl-1 do
+            wc:=wc+input[i]+' ';
+          m.add(_context,wc);
+          exit;
+        end;
+      end;
+
+
+    end;
+  procedure TPatternnode.delete(context:integer;I:integer);
+    begin
+      if i<=_count[context] then begin
+        TPatternNode(_childs[context].Objects[i]).clear;
+        _childs[context].Delete(i);
+        dec(_count[context]);
+      end;
+    end;
+  Procedure TPatternnode.clear;
+    var i:integer;
+    begin
+      for i:=0 to CNumContext-1 do
+        while _count[i] >0 do delete(i,0);
+    end;
+  constructor TPatternMatcher.Create;
+    begin
+      _root:=TPatternNode.Create('',nil);
+      _tokenizer:=TStringTokenizer.create(' ');
+
+      _locked:=false;
+    end;
+  destructor TPatternMatcher.destroy;
+    var
+      N:TPatternNode;
+    begin
+      _tokenizer.free;
+      N:=_root;
+      n.clear;
+      n.destroy;
+      inherited destroy;
+    end;
+  procedure TPatternMatcher.Add(path:string;t:string);
+    var
+      i:integer;
+      n:Tpatternnode;
+      c:integer;
+      ci:integer;
+    begin
+      while _locked do ;
+      _locked:=true;
+      Path:=Trim(path);
+      n:=_root;
+      _Tokenizer.tokenize(path);
+      c:=0; {context=<input>}
+      for i:=0 to _Tokenizer._count-1 do begin
+        for ci:=0 to CNumContext-1 do
+          if AnsiSameText(_Tokenizer._tokens[i],CContext[ci]) then
+            c:=ci;
+
+        n:=n.add(_Tokenizer._tokens[i],c);
+      end;
+      if n._template='' then begin
+        n._template:=t;
+        n._path:=path;
+        inc(_count);
+      end;
+      _locked:=false;
+    end;
+  function TPatternMatcher.Match:TMatch;
+    var
+      input,that,topic:string;
+      i:integer;
+    begin
+      result:=nil;
+      if not assigned(_SentenceTokenizer) then
+        _SentenceTokenizer:=TStringTokenizer.Create(UUtils.SentenceSplitterChars);
+
+      input:=Memory.getVAr('input');
+      input:=Preprocessor.process(' '+input+' ');
+      input:=Trim(input);
+
+      _SentenceTokenizer.Tokenize(input);
+      For i:=0 to _sentenceTokenizer._count-1 do begin
+        that:=Memory.getVar('that');
+        if that='' then that:='*';
+        topic:=Memory.getVar('topic');
+        if topic='' then topic:='*';
+        input:=trim(_sentenceTokenizer._Tokens[i]);
+        if (input<>' ') and (input<>'') then begin
+          if result<>nil then begin
+            result.free;
+          end;
+          result:=Match(input,that,topic);
+
+        end;
+      end;
+    end;
+  function TPatternMatcher.Match(path:string):TMatch;
+    var
+      n:Tpatternnode;
+    begin
+      while _locked do ;
+      _locked:=true;
+      Matchfault:=0;
+      Path:=Trim(path);
+      n:=_root;
+      _Tokenizer.tokenize(path);
+      result:=TMatch.create;
+      n:=n.match(_tokenizer._tokens,0,result);
+      _locked:=false;
+      if n<> nil then begin
+        result._template:=n._template;
+        result._path:=n._path;
+      end;
+      _matchfault:=matchfault;
+      //Memory.Match:=Result;
+      //result:=n._template;
+      //result:=result + '//'+ inttostr(matchfault);
+    end;
+  function TPatternMatcher.Match(input,that,topic:string):TMatch;
+    begin
+      result:=Match(input+' <that> '+that+' <topic> '+topic);
+    end;
+  function TPatternMatcher.MatchInput(input:string):TMatch;
+    var
+      that,topic:string;
+    begin
+      that:=Memory.getVar('that');
+      if that='' then that:='*';
+      topic:=Memory.getVar('topic');
+      if topic='' then topic:='*';
+      result:=Match(input,that,topic);
+    end;
+begin
+nodecount:=0;
+end.
+
+----------------------------------------------------------------------------------
+unit UAIMLLoader;
+
+interface
+uses UPatternMatcher,LibXmlParser;
+type
+
+  TAIMLLoader=class
+    _pattern,
+    _that,
+    _topic:string;
+
+    _template:string;
+    parser:TXmlParser;
+    procedure load(filename:string);
+    procedure TopicStart;
+    procedure TopicEnd;
+    procedure That;
+    procedure CategoryStart;
+    Procedure CategoryEnd;
+
+    function PatternElement:boolean;
+    function ThatElement:boolean;
+    function TemplateElement:boolean;
+    function PatternBotElement:boolean;
+    function CategoryElement:boolean;
+    function AIMLElement:boolean;
+  end;
+var
+  AIMLLoader:TAIMLLoader;
+
+implementation
+  uses SysUtils,UVariables,ULogging;
+
+
+  const max_content_size=20480;
+  Procedure TAIMLLoader.TopicStart;
+    begin
+      _topic:=parser.CurAttr.Value('name');
+    end;
+  Procedure TAIMLLoader.TopicEnd;
+    begin
+      _topic:='*';
+    end;
+  Procedure TAIMLLoader.That;
+    begin
+      _That:=parser.CurContent;
+    end;
+  Procedure TAImlLoader.CategoryStart;
+    begin
+      _pattern:='';
+      _that:='';
+      _template:='';
+    end;
+  Procedure TAImlLoader.CategoryEnd;
+    begin
+      if _pattern='' then _pattern:='*';
+      if _that='' then _that:='*';
+      PatternMatcher.add(_pattern+' <that> '+_that+' <topic> '+_topic,_template);
+
+    end;
+  function TAIMLLoader.PatternBotElement:boolean;
+    var
+      prop:string;
+    begin
+      prop:=Memory.getProp(parser.CurAttr.Value('name'));
+      if prop='' then
+        result:=false
+      else begin
+        _Pattern:=_pattern+' '+Prop;
+        result:=true;
+      end;
+    end;
+  function TAIMLLoader.PatternElement:boolean;
+    begin
+      _pattern:='';
+      result:=true;
+      while (result)and(Parser.Scan) do begin
+        case Parser.CurPartType of
+          ptContent:_pattern:=_pattern+' '+Parser.CurContent;
+          ptEmptyTag: if (Parser.CurName='bot') then
+                        result:=PAtternBotElement
+                      else
+                        result:=false;
+          ptEndTag: if (Parser.CurName='pattern') then break
+                    else result:=false;
+          ptComment:;
+        else
+          result:=false;
+        end;
+      end;
+    end;
+  function TAIMLLoader.ThatElement:boolean;
+    begin
+      _that:='';
+      result:=true;
+      while (result)and(Parser.Scan)  do begin
+        case Parser.CurPartType of
+          ptContent:_that:=_that+' '+Parser.CurContent;
+          ptEndTag: if (Parser.CurName='that') then break
+                    else result:=false;
+          ptComment:;
+        else
+          result:=false;
+        end;
+      end;
+      if _that='' then _that:='*';
+    end;
+  function TAIMLLoader.TemplateElement:boolean;
+    var
+      start:Pchar;
+      done:boolean;
+    begin
+      _template:='';
+      start:=Parser.CurFinal+1;
+      done:=false;
+      while (not done) and (parser.scan) do
+        done:=(Parser.CurPartType=ptEndTag) and (Parser.CurName='template');
+      if done then begin
+        SetLength(_template,Parser.CurStart-start);
+        _template:=StrLCopy(PCHar(_template),start,Parser.CurStart-start);
+        result:=true;
+      end else
+        result:=false;
+    end;
+  function TAIMLLoader.CategoryElement:boolean;
+
+    begin
+      result:=true;
+      _that:='*';
+      while (result)and(parser.Scan) do
+        case parser.CurPartType of
+          ptStartTag:begin
+            if parser.CurName='template' then result:=TemplateElement else
+            if parser.CurName='pattern' then result:=PatternElement else
+            if parser.CurName='that' then result:=ThatElement;
+          end;
+          ptEndTag: begin
+            if parser.CurName='category' then break;
+          end;
+        end;
+      if result then begin
+        if _that='' then _that:='*';
+        PatternMatcher.add(_pattern+' <that> '+_that+' <topic> '+_topic,_template);
+      end else
+        while not ((Parser.CurPartType=ptEndTag) and (Parser.CurName='category')) do
+          parser.Scan;
+      if (PatternMatcher._count mod 5000)=0 then log.Log('aimlloader',Inttostr(PatternMatcher._count)+' 个类别...');
+    end;
+  function TAIMLLoader.AIMLElement:boolean;
+    begin
+      _topic:='*';
+      result:=true;
+      while (result)and(parser.Scan) do
+        case parser.CurPartType of
+          ptStartTag:begin
+            if parser.CurName='category' then CategoryElement else
+            if parser.CurName='topic' then Topicstart;
+          end;
+          ptEndTag: begin
+            if parser.CurName='topic' then TopicEnd else
+            if parser.CurName='aiml' then break;
+          end;
+        end;
+    end;
+  procedure TAIMLLoader.load(filename:string);
+    var
+      search:TSearchRec;
+      dir:string;
+      name:string;
+      i:integer;
+    begin
+      parser:=TXmlParser.Create;
+      parser.Normalize:=true;
+      for i:=1 to length(filename) do
+        if filename[i]='/' then filename[i]:='\';
+      dir:=ExtractFilePath(filename);
+
+      if findfirst(filename,0,search) =0 then
+        repeat
+          name:=dir+Search.Name;
+          if not FileExists(name) then begin
+            log.log('aimlloader','警告： '+Name+' 不存在。');
+            continue;
+          end;
+          log.log('aimlloader','正在加载 '+Name);
+          parser.LoadFromFile(Name);
+          parser.startscan;
+          while parser.Scan do
+            case parser.CurPartType of
+              ptStartTag:if parser.CurName='aiml' then AIMLElement;
+            end;
+          parser.clear;
+        until FindNext(search)<>0;
+      FindClose(search);
+      parser.free;
+      Log.log('aimlloader','完成，共加载 '+InttoStr(PatternMatcher._count)+' 个种类。');
+    end;
+end.
+
+-----------------------------------------------------------------------------------
+unit UVariables;
+{变量处理}
+
+interface
+uses classes,UPatternMatcher;
+type
+  TMemory=class
+    vars:TStringList;
+    props:TStringList;
+    bot_ID:string;   
+    //Match:TMatch;
+    constructor create;
+    destructor Destroy; override;
+    procedure setVar(name,value:string); overload; virtual;
+    procedure setVar(name:string;index:integer;value:string); overload; virtual;
+    function getVar(name:string):string; overload; virtual;
+    function getVar(name:string;index:integer):string; overload; virtual;
+    procedure ClearVars;
+
+
+    function getProp(name:string):string;
+    procedure setProp(name,value:string);
+
+    Procedure Save;
+    Procedure Load;
+
+    function unDelimitChinese(s:string):string;
+  end;
+var Memory:Tmemory;
+implementation
+uses sysutils,ULogging;
+  constructor TMemory.Create;
+    begin
+      inherited Create;
+      vars:=TStringList.Create;
+      vars.Duplicates:=dupError;
+      vars.Sorted:=False;
+      Props:=TStringList.Create;
+      Props.Duplicates:=dupError;
+      Props.Sorted:=False;
+    end;
+  destructor TMemory.Destroy;
+    begin
+      Save;
+      vars.Free;
+      inherited Destroy;
+    end;
+
+  function TMemory.unDelimitChinese(s:string):string;
+    //中文字符处理完后的去空格处理
+    var
+      i:longint;
+    begin
+      result:=s;
+      i:=1;
+      while i<length(result)-1 do
+        begin
+          if ord(result[i]) in [$81..$FF] then //GB 码
+            if result[i+2]=' ' then
+              begin
+                delete(result,i+2,1);
+                dec(i);
+              end
+            else
+              inc(i);
+          inc(i);
+        end;
+      result:=Trim(result);
+    end;
+
+  procedure TMemory.setVar(name,value:string);
+    //设置变量值
+    begin
+      setVar(name,0,value);
+    end;
+  procedure TMemory.setVar(name:string;index:integer;value:string);
+    //设置带索引的变量值
+    begin
+      name:=name+'['+inttostr(index)+']';
+      vars.values[name]:=unDelimitChinese(value);  //变量存入前应进行中文去空格处理
+    end;
+
+  function TMemory.getVar(name:string):string;
+    //获取变量值
+    begin
+      result:=getVar(name,0);  //索引默认为0
+    end;
+  function TMemory.getVar(name:string;index:integer):string;
+    //获取带索引的变量值
+    begin
+      name:=name+'['+inttostr(index)+']';
+      result:=vars.Values[name];
+    end;
+  procedure TMemory.setprop(name,value:string);
+    begin
+      props.values[name]:=value;
+    end;
+  function TMemory.getProp(name:string):string;
+    begin
+      result:=props.Values[name];
+    end;
+  procedure TMemory.ClearVars;
+    //清除所有变量
+    begin
+      vars.Clear;
+    end;
+
+  Procedure TMemory.Save;
+    //保存所有变量
+    var filename:string;
+    begin
+      filename:=bot_id+'.variables';
+      Log.Log('variables','正在保存机器人 '+bot_id+' 的变量');
+      try
+        Vars.SaveToFile(filename);
+      except
+        Log.Log('variables','错误：不能保存变量');
+      end;
+    end;
+  Procedure TMemory.Load;
+    //加载变量
+    var
+      filename:string;
+    begin
+      filename:=bot_id+'.variables';
+      if fileexists(filename) then begin  //文件存在则加载
+        Log.Log('variables','正在加载机器人 '+bot_id+' 的变量');
+        Vars.LoadFromFile(filename);
+      end;
+    end;
+
+end.
+
+----------------------------------------------------------------------------
+unit UTemplateProcessor;
+{模板处理}
+
+interface
+uses
+   LibXMLParser,UPatternMatcher,classes,UElementFactory;
+type
+  TTemplateProcessor=class
+    function Process(Match:Tmatch):string;
+  end;
+
+  function ProcessContents(Match:TMatch;Parser:TXMLParser):string;
+var
+  TemplateProcessor:TTemplateProcessor;
+implementation
+uses
+  UVariables,SysUtils,UUtils;
+
+  function ProcessContents(Match:TMatch;Parser:TXMLParser):string;
+    var
+      name:string;
+    begin
+     result:='';
+     if parser.CurPartType=ptEmptyTag then exit;
+     name:=Parser.CurName;
+
+     while parser.Scan do begin
+       if (parser.CurPartType=ptendTag) and (parser.CurName=name) then
+         break
+       else
+       case parser.CurPartType of
+         ptContent:result:=result+GetElementContents(parser);
+         ptEmptyTag,
+         ptStartTag,
+         ptEndTag:begin
+                    if parser.CurStart[-1] in CWhitespace then result:=result+' ';         
+                    result:=result+ElementFactory.get(parser.CurName).Process(Match,Parser);
+                  end;
+       end
+     end;
+    end;
+
+function TTEmplateProcessor.Process(match:TMatch):string;
+  var
+    Parser:TXMLParser;
+//Added program begin
+    i:integer;
+//Added program end
+  begin
+    result:='';
+    if match._template='' then exit;
+    Parser:=TXMLParser.Create;
+    Parser.LoadFromBuffer(PChar(match._template));
+    Parser.StartScan;
+     while parser.Scan do begin
+       case parser.CurPartType of
+        ptContent:result:=result+GetElementContents(parser);
+        ptEmptyTag,
+        ptStartTag,
+        ptEndTag:begin
+                   if (parser.CurStart<>Parser.DocBuffer) and (parser.CurStart[-1] in CWhitespace) then result:=result+' ';
+                   result:=result+ElementFactory.get(parser.CurName).Process(Match,Parser);
+                 end;
+      end
+    end;
+    Parser.Free;
+    result:=ConvertWs(result,true);
+
+//中文字符处理完后的去空格处理
+    i:=1;
+    while i<length(result)-1 do
+      begin
+        if ord(result[i]) in [$81..$FF] then //GB 码
+          if result[i+2]=' ' then
+            begin
+              delete(result,i+2,1);
+              dec(i);
+            end
+          else
+            inc(i);
+        inc(i);
+      end;
+
+    result:=Trim(result);
+  end;
+end.
+
+------------------------------------------------------------------------------
+unit UElementFactory;
+{元素工厂}
+
+interface
+uses LibXMLParser,UPatternMatcher,classes;
+type
+  {abstract base class for all template elements}
+  TTemplateElement=class
+    constructor Create;
+    procedure Register;virtual;abstract;
+    function Process(Match:TMatch;Parser:TXMLParser):string;virtual;abstract;
+  end;
+
+  {this is a container class that returns an instance of a template processing element}
+  TElementFactory=class
+    _Elements:TStringList;
+    _default:TTemplateElement;
+    constructor Create;
+    destructor Destroy; override;
+    procedure register(name:string;Element:TTemplateElement);
+
+    procedure registerdefault(element:TTemplateElement);
+    function get(name:string):TTEmplateElement;
+  end;
+
+
+
+var
+  ElementFactory:TElementFactory;
+
+implementation
+
+  constructor TTemplateElement.Create;
+    //元素对象-构造函数
+    begin
+      inherited create;
+      register;
+    end;
+  constructor TElementFactory.Create;
+    //元素工厂-构造函数
+    begin
+      _Elements:=TStringlist.Create;
+      _Elements.Sorted:=True;
+    end;
+  Destructor TElementFactory.Destroy;
+    //元素工厂-析构函数
+    var
+      i:integer;
+      j:integer;
+      this:TObject;
+    begin
+      for i:=0 to _Elements.Count-1 do
+        if assigned(_Elements.Objects[i]) then begin {frees the current instance, and removes all references to it}
+          This:=_Elements.Objects[i];
+          _Elements.Objects[i].Free;
+          for j:=i+1 to _Elements.Count-1 do
+            if _Elements.Objects[j]=this then _Elements.Objects[j]:=nil;
+        end;
+      _Elements.Free;
+      inherited destroy;
+    end;
+  Procedure TElementFactory.register(name:string;Element:TTemplateElement);
+    //注册一个元素对象
+    begin
+      _Elements.AddObject(name,Element);
+    end;
+  Procedure TElementFactory.registerdefault(Element:TTemplateElement);
+    //注册一个元素对象，使其成为默认对象
+    begin
+      _default:=Element;
+    end;
+  function TElementFactory.get(name:string):TTEmplateElement;
+    //输入一个元素名，返回名字代表的元素对象
+    var
+      i:integer;
+    begin
+      if _Elements.Find(name,i) then
+        result:=_elements.Objects[i] as TTEmplateElement  //返回找到的对象
+      else  //找不到该对象，则返回默认对象
+        result:=_default;
+    end;
+begin
+  if not assigned(ElementFactory) then ElementFactory:=TElementFactory.Create;
+end.
+
+-----------------------------------------------------------------------------
+unit UElements;
+{所有在模板中支持的元素对象}
+
+interface
+implementation
+uses
+  UElementFActory,UPatternMatcher,UVariables,UAIMLLoader,UTemplateProcessor,
+  LibXMLParser,SysUtils,classes,UUtils;
+
+type
+  TBotElement=class(TTEmplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TxStarElement=class(TTEmplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+type
+  TGetElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+type
+  TSetElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TDefaultElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TLearnElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+type
+  TSrElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TThinkElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TSraiElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TRandomElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TBrElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TConditionElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    function blockCondition(variable,value:string;Match:TMatch;Parser:TXMLParser):string;
+    function blockSwitch(variable:string;Match:TMatch;Parser:TXMLParser):string;
+    //function blockMulti(Match:TMatch;Parser:TXMLParser):string;
+
+    procedure register;override;
+  end;
+type
+  TCaseElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TThatElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TVersionElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TidElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TSizeElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TDateElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TGossipElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TInputElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TSubstElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TJScriptElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TSystemElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+type
+  TforgetElement=class(TTemplateElement)
+    function Process(Match:TMatch;Parser:TXMLParser):string;override;
+    procedure register;override;
+  end;
+
+
+  function TSetElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    var
+      name:string;
+    begin
+      name:=parser.CurAttr.Value('name');
+      result:=ProcessContents(Match,Parser);
+      result:=TrimWS(ConvertWs(result,true));
+      Memory.setVar(name,result);
+    end;
+  procedure TSetElement.register;
+    begin
+      ElementFactory.register('set',self);
+    end;
+
+  function TBotElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=Memory.getProp(parser.CurAttr.Value('name'));
+    end;
+  procedure TBotElement.register;
+    begin
+      ElementFactory.register('bot',Self);
+    end;
+  function TGetElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=Memory.getVar(parser.CurAttr.Value('name'));
+      if (Parser.CurPartType=ptEmptyTag) or
+         (Parser.CurPartType=ptEndTag) then exit;
+      if result<>'' then
+        repeat until
+          (not parser.Scan)or
+          ((parser.CurPartType=ptEndTag)and
+           (parser.CurName='get'))
+      else
+        result:=ProcessContents(Match,Parser);
+    end;
+  procedure TGetElement.register;
+    begin
+      ElementFactory.register('get',Self);
+    end;
+
+  function TxStarElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //统配符(star)元素-处理
+    var
+      context:integer;
+      index:string;
+    begin
+      if parser.CurPartType<>ptEndTag then begin
+        if parser.CurName='star' then context:=0;
+        if parser.CurName='thatstar' then context:=1;
+        if parser.CurName='topicstar' then context:=2;
+        index:=Parser.CurAttr.Value('index');
+        if index='' then index:='1';  //默认为第一个
+        result:=Match.get(context,strtoint(index)); //获得匹配的 star 值
+        result:=TrimWS(result);
+      end else
+        result:='';
+    end;
+  procedure TxStarElement.register;
+    //统配符(star)元素-注册
+    begin
+      ElementFactory.register('star',self);
+      ElementFactory.register('thatstar',self);
+      ElementFactory.register('topicstar',self);
+    end;
+
+  function TDefaultElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      SetLength(result,Parser.CurFinal-Parser.CurStart+1);
+      result:=StrLCopy(PCHar(result),Parser.CurStart,Parser.CurFinal-Parser.CurStart+1);
+    end;
+  procedure TDefaultElement.register;
+    begin
+      ElementFactory.registerdefault(Self);
+    end;
+
+  function TLearnElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:='';
+      if parser.CurPartType=ptEmptyTag then exit;
+      result:=ProcessContents(Match,Parser);
+      if not assigned(AIMLLoader) then AIMLLoader:=TAIMLLoader.Create;
+      AIMLLoader.load(result);
+    end;
+  procedure TLearnElement.register;
+    begin
+      ElementFactory.register('learn',Self);
+    end;
+
+  function TSrElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    var
+      temp:TMatch;
+    begin
+      temp:=PatternMatcher.Matchinput(Match.get(0,1));
+      result:=TemplateProcessor.Process(temp);
+      temp.free;
+      if parser.curPartType=ptStartTag then
+      while (parser.scan) and (parser.curparttype<>ptEndTag) and (parser.curName<>'sr') do;
+    end;
+  procedure TSrElement.register;
+    begin
+      ElementFactory.register('sr',Self);
+    end;
+
+  function TThinkElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      ProcessContents(Match,Parser);
+      result:='';
+    end;
+  procedure TThinkElement.register;
+    begin
+      ElementFactory.register('think',Self);
+    end;
+  function TSraiElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    var
+      temp:TMatch;
+    begin
+      result:=ProcessContents(Match,Parser);
+      if result='' then begin
+        temp:=PatternMatcher.Matchinput(Match.get(0,1));
+        result:=TemplateProcessor.Process(temp);
+        temp.free;
+      end else begin
+        temp:=PatternMatcher.Matchinput(result);
+        result:=TemplateProcessor.Process(temp);
+        temp.free;
+      end;
+    end;
+  procedure TSraiElement.register;
+    begin
+      ElementFactory.register('srai',Self);
+    end;
+
+  function TRandomElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    var
+      Options:Tlist;
+      //Start:PChar;
+      continue:PChar;
+      //i:integer;
+    begin
+      Options:=Tlist.Create;
+      result:='';
+      While parser.Scan do begin
+        case parser.CurPartType of
+          ptStartTag:if (parser.CurName='li') then begin
+                         Options.Add(Parser.CurFinal);
+                         SkipElement(Parser);
+                     end;
+          ptEndTag:if (parser.CurName='random') then break;
+        end;
+      end;
+      continue:=parser.curfinal;
+
+      Parser.CurFinal:=Options[random(options.count)];
+      Parser.CurName:='li';
+      result:=ProcessContents(Match,Parser);
+      Options.Free;
+      parser.CurFinal:=Continue;
+    end;
+  procedure TRandomElement.register;
+    begin
+      Randomize;
+      ElementFactory.register('random',Self);
+    end;
+
+  function TConditionElement.blockCondition(variable,value:string;Match:TMatch;Parser:TXMLParser):string;
+    //单条件的条件(condition)元素-处理
+    begin
+      if AnsiCompareStr(Memory.getVar(variable),value)=0 then begin
+        result:=ProcessContents(Match,Parser);
+      end else begin
+        result:='';
+        SkipElement(Parser);
+      end;
+    end;
+  function TConditionElement.blockSwitch(variable:string;Match:TMatch;Parser:TXMLParser):string;
+    //多条件的条件(condition)元素-处理
+    var
+      curval:string;
+      curvar:string;
+      defaultitem:boolean;
+      nvItem:boolean; {<li name="xx" value=""></li>}
+      vItem:boolean;  {<li name="xx" value=""></li>}
+    begin
+      result:='';
+      While (Parser.Scan) do begin
+        case parser.CurPartType of
+          ptStartTag,
+          ptEmptyTag:if parser.CurName='li' then begin
+                       curval:=Parser.CurAttr.Value('value');
+                       curvar:=Parser.CurAttr.Value('name');
+                       defaultItem:=(Parser.CurAttr.Count= 0);
+                       nvItem:=(Parser.CurAttr.Count= 2)and AnsiSameStr(Memory.getVar(curvar),curval);
+                       vItem:=(variable<>'') and AnsiSameStr(Memory.getVar(variable),curval);
+                       if (defaultItem or nvItem or vItem)
+                       then begin
+                         result:=ProcessContents(Match,Parser);
+                         SkipElement('condition',parser);
+                         break;
+                       end else
+                         SkipElement(parser);
+                     end;
+        end;
+      end;
+    end;
+  function TConditionElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //条件(condition)元素-处理
+    var
+      mainval:string;
+      mainvar:string;
+    begin
+      mainval:=Parser.CurAttr.Value('value');
+      mainvar:=Parser.CurAttr.Value('name');
+      if (mainvar<>'') and (Parser.CurAttr.Node('value')<>nil) then begin
+        result:=blockCondition(mainvar,mainval,Match,Parser);
+      end else if (mainval='') then begin
+        result:=blockSwitch(mainvar,Match,Parser);
+      end;
+    end;
+  procedure TConditionElement.register;
+    //条件(condition)元素-注册
+    begin
+      ElementFactory.register('condition',Self);
+    end;
+  function TBrElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=' ';
+    end;
+  procedure TBrElement.register;
+    begin
+      ElementFactory.register('br',Self);
+    end;
+
+  function TCaseElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //大小写(case)元素-处理
+    var
+      specificElement:string;
+      upstr:string;
+      i:integer;
+    begin
+      result:='';
+      specificElement:=Parser.Curname;
+      result:=ProcessContents(Match,Parser);
+      result:=convertWS(result,true);
+      if SpecificElement='uppercase' then
+        result:=AnsiUpperCase(result)
+      else if SpecificElement='lowercase' then
+        result:=AnsiLowerCase(result)
+      else if (SpecificElement='formal') and (result<>'')then begin
+        upstr:=AnsiUpperCase(result);
+        result[1]:=upstr[1];
+        for i:=1 to length(result)-1 do
+          if result[i]=' ' then
+            result[i+1]:=upstr[i+1];
+      end else if SpecificElement='sentence' then
+        result[1]:=AnsiUpperCase(result)[1];
+    end;
+  procedure TCaseElement.register;
+    //大小写(case)元素-注册
+    begin
+      ElementFactory.register('uppercase',Self);
+      ElementFactory.register('lowercase',Self);
+      ElementFactory.register('formal',Self);
+      ElementFactory.register('sentence',Self);
+    end;
+
+  function TThatElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //上次(that)元素-处理
+    var
+      thisTag:string;
+    begin
+      ThisTag:=Parser.CurName;
+      if ThisTag='botsaid' then thistag:='that';
+      if Parser.CurAttr.Count<>0 then result :=''
+      else if ThisTag='that' then
+        result:=Memory.getVar('that')
+      else if ThisTag='justbeforethat' then
+        result:=Memory.getVar('that',1);
+
+      SkipElement(parser);
+    end;
+  procedure TThatElement.register;
+    //上次(that)元素-注册
+    begin
+      ElementFactory.register('that',Self);
+      ElementFactory.register('justbeforethat',Self);
+      ElementFactory.register('botsaid',Self);
+    end;
+
+  function TVersionElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //版本(version)元素-处理
+    begin
+      result:='Operator Chat v0.2';
+      SkipElement(Parser);
+    end;
+  procedure TVersionElement.register;
+    //版本(version)元素-注册
+    begin
+      ElementFactory.register('version',Self);
+      ElementFactory.register('getversion',Self);
+    end;
+
+  function TIdElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:='0';
+      SkipElement(Parser);
+    end;
+  procedure TIdElement.register;
+    begin
+      ElementFactory.register('id',Self);
+      ElementFactory.register('get_ip',Self);
+    end;
+
+  function TSizeElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=inttostr(PatternMatcher._count);
+      SkipElement(Parser);
+    end;
+  procedure TSizeElement.register;
+    begin
+      ElementFactory.register('size',Self);
+      ElementFactory.register('getsize',Self);
+    end;
+
+  function TDateElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //日期(date)元素-处理
+    begin
+      result:=DatetoStr(now);  //转换日期为字符串
+      skipElement(parser);
+    end;
+  procedure TDateElement.register;
+    //日期(date)元素-注册
+    begin
+      ElementFactory.register('date',Self);
+    end;
+
+  function TGossipElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=ProcessContents(Match,Parser);
+      WrFile('gossip.log',result);
+    end;
+  procedure TGossipElement.register;
+    begin
+      ElementFactory.register('gossip',Self);
+    end;
+
+  function TInputElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    var
+      thisTag:string;
+      i:integer;
+      si:string;
+    begin
+      ThisTag:=Parser.CurName;
+      SkipElement(Parser);
+
+      if ThisTag='input' then begin
+        si:=Parser.CurAttr.Value('index');
+        if si<>'' then
+          i:=strtoint(si)-1
+        else
+          i:=0;
+        result:=Memory.getVar('input',i)
+      end else if ThisTag='justthat' then
+        result:=Memory.getVar('input',1)
+      else if ThisTag='beforethat' then
+        result:=Memory.getVar('input',2);
+
+    end;
+  procedure TInputElement.register;
+    begin
+      ElementFactory.register('input',Self);
+      ElementFactory.register('justthat',Self);
+      ElementFactory.register('beforethat',Self);
+    end;
+  function TSubstElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      if parser.CurPartType=ptEmptyTag then
+        result:=Match.get(0,1)
+      else
+        result:='';
+    end;
+  procedure TSubstElement.register;
+    begin
+      ElementFactory.register('person',Self);
+      ElementFactory.register('person2',Self);
+      ElementFactory.register('gender',Self);
+    end;
+  function TJScriptElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=Parser.CurAttr.Value('alt');
+      SkipElement(parser);
+    end;
+  procedure TJScriptElement.register;
+    begin
+      ElementFactory.register('javascript',Self);
+    end;
+  function TSystemElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    begin
+      result:=Parser.CurAttr.Value('alt');;
+      if result<>'' then SkipElement(parser);
+    end;
+  procedure TSystemElement.register;
+    begin
+      ElementFactory.register('system',Self);
+    end;
+
+  function TForgetElement.Process(Match:TMatch;Parser:TXMLParser):string;
+    //忘记(forget)标签-处理
+    begin
+      result:=ProcessContents(Match,Parser);
+      if result='' then
+        begin
+          SkipElement(parser);
+          Memory.ClearVars;
+        end
+      else
+        Memory.setVar(result,' ');
+    end;
+  procedure TForgetElement.register;
+    //忘记(forget)标签-注册
+    begin
+      ElementFactory.register('forget',Self);
+    end;
+
+begin
+//创建所有的元素对象
+  if not assigned(ElementFactory) then ElementFactory:=TElementFactory.Create;
+  TBotElement.Create;
+  TDefaultElement.Create;
+  TGetElement.Create;
+  TxStarElement.Create;
+  TLearnElement.Create;
+  TSetElement.Create;
+  TSrElement.Create;
+  TThinkElement.Create;
+  TSraiElement.Create;
+  TRandomElement.Create;
+  TConditionElement.Create;
+  TBrElement.Create;
+  TCaseElement.Create;
+  TThatElement.Create;
+  TVersionElement.Create;
+  TIdElement.Create;
+  TSizeElement.Create;
+  TDateElement.Create;
+  TGossipElement.Create;
+  TInputElement.Create;
+  TsubstElement.Create;
+  TJscriptElement.Create;
+  TsystemElement.Create;
+
+  TForgetElement.Create;
+
+end.
+
+----------------------------------------------------------------------------
+unit UChat;
+{用户界面}
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  ComCtrls, StdCtrls, ExtCtrls, UBotloader,UUtils, XPMan;
+
+type
+  TChat = class(TForm)
+    RichEdit1: TRichEdit;
+    Panel1: TPanel;
+    Button1: TButton;
+    Memo1: TMemo;
+    XPManifest1: TXPManifest;
+    // the 'main' method, sends user input for matching & processing the result
+    procedure Button1Click(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure RichEdit1MouseWheel(Sender: TObject; Shift: TShiftState;
+      WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+  private
+    _LoaderThread:TBotLoaderThread;
+    _SentenceSplitter:TStringTokenizer;
+    Procedure Add(s:string);
+    { Private declarations }
+  public
+    Procedure AddUserInput(s:string);
+    Procedure AddBotReply(s:string);
+    Procedure AddLogMessage(s:string);
+    { Public declarations }
+  end;
+
+var
+  Chat: TChat;
+
+implementation
+Uses
+  UPatternMatcher,UTemplateProcessor,UVariables,ULogging,LibXMLParser;
+
+  Procedure TChat.Add(s:string);
+    begin
+      RichEdit1.Lines.Add(s);
+      RichEdit1.SelStart:=Length(RichEdit1.TExt);
+      SendMessage(RichEdit1.Handle,EM_SCROLLCARET,0,0);
+    end;
+  Procedure TChat.AddUserInput(s:string);
+    var name:string;
+    begin
+
+      RichEdit1.SelStart:=Length(RichEdit1.TExt);
+      with RichEdit1.SelAttributes do begin
+          Color := clMaroon;
+          Style := [];
+      end;
+      Add('> '+s);
+      name:=Memory.getVar('name');
+      if name='' then name:='用户';
+      Log.chatlog(name,s);
+    end;
+  Procedure TChat.AddBotReply(s:string);
+    begin
+      if s='' then exit;
+      RichEdit1.SelStart:=Length(RichEdit1.TExt);
+      with RichEdit1.SelAttributes do begin
+          Color := clBlack;
+          Style := [];
+      end;
+      Add(s);
+      Log.Chatlog(Memory.GetProp('name'),s);
+
+    end;
+  Procedure TChat.AddLogMessage(s:string);
+    begin
+      RichEdit1.SelStart:=Length(RichEdit1.TExt);
+      with RichEdit1.SelAttributes do begin
+          Color := clBlue;
+          Style := [];
+      end;
+      Add(s);
+    end;
+{$R *.DFM}
+
+procedure TChat.Button1Click(Sender: TObject);
+var
+  reply:string;
+  Match:TMatch;
+  input:String;
+  i:integer;
+begin
+  input:=Memo1.Text;
+  AddUserInput(input);
+  Memory.setVar('input',input);
+  input:=Trim(ConvertWS(Preprocessor.process(' '+input+' '),true));
+
+  _SentenceSplitter.SetDelimiter(SentenceSplitterChars); {update, if we're still loading}
+  _SentenceSplitter.Tokenize(input);
+
+  for i:=0 to _SentenceSplitter._count-1 do begin
+    input:=Trim(_SentenceSplitter._tokens[i]);
+    Match:=PatternMatcher.MatchInput(input);
+    reply:=TemplateProcessor.Process(match);
+    match.free;
+  end;
+
+  AddBotReply(reply);
+  //AddLogMessage('Nodes traversed: '+inttostr(PatternMatcher._matchfault));
+  Add('');
+  reply:=PreProcessor.process(reply);
+  _SentenceSplitter.SetDelimiter(SentenceSplitterChars);
+  _SentenceSplitter.Tokenize(reply);
+
+  Memory.setVar('that',_SentenceSplitter.GetLast);
+  Memo1.Clear;
+end;
+
+procedure TChat.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Application.TErminate;
+end;
+
+procedure TChat.FormCreate(Sender: TObject);
+begin
+  Log.Log('正在启动 Operator Chat...');
+  Log.Flush;
+  _LoaderThread:=TBotLoaderThread.Create(true);
+  //BotLoader.load('startup.xml');
+  _LoaderThread.Resume;
+  _SentenceSplitter:=TStringTokenizer.Create(SentenceSplitterChars);
+end;
+
+procedure TChat.RichEdit1MouseWheel(Sender: TObject; Shift: TShiftState;
+  WheelDelta: Integer; MousePos: TPoint; var Handled: Boolean);
+begin
+  SendMessage(RichEdit1.Handle,EM_LINESCROLL,0,-(WheelDelta div 120)*Mouse.WheelScrollLines);
+  handled:=true;
+end;
+
+end.
+
+-------------------------------------------------------------------------------
+
+unit UBotLoader;
+
+interface
+uses LibXMLParser,UAIMLLoader,classes, UPAtternMatcher;
+type
+  TBotloaderThread=class(TThread)
+    procedure Execute;override;
+  end;
+  TBotLoader=class
+    loaded:boolean;
+    parser:TXmlParser;
+
+    procedure load(filename:string);
+    Function BotElement:boolean;
+    function SentenceSplitters:boolean;
+    function InputSubstitutions:boolean;
+    Function PropertyElement:boolean;
+    Function LearnElement:boolean;
+  end;
+var
+  Botloader:TBotLoader;
+implementation
+  uses SysUtils,UVariables,ULogging,UUtils;
+  procedure TBotLoaderThread.Execute;
+    begin
+      FreeOnTerminate:=true;
+      BotLoader.load('startup.xml');
+    end;
+  function TBotLoader.PropertyElement:boolean;
+    var
+      prop,val:string;
+    begin
+      result:=true;
+      prop:=Parser.CurAttr.Value('name');
+      val:=Parser.CurAttr.Value('value');
+
+      if (prop='') or (val ='') then
+        result:=false
+      else begin
+        Memory.setProp(prop,val);
+        //log.Log('botloader','机器人属性 '+prop+'="'+val+'"');
+      end;
+      SkipElement(Parser);
+    end;
+  function TBotLoader.LearnElement:boolean;
+    begin
+      While parser.scan do
+        if (parser.CurPartType=ptEndTag)and(parser.Curname='learn') then
+          break;
+      if Parser.CurContent<>'' then begin
+        AIMLLoader.load(Parser.CurContent);
+        loaded:=true;
+        result:=true;
+      end else
+        result:=false;
+
+    end;
+  function TBotLoader.BotElement:boolean;
+    var
+      numprops:integer;
+      bot_ID:string;
+    begin
+      result:=true;
+      numprops:=0;
+      bot_ID:=Parser.CurAttr.Value('id');
+      if AnsiSameStr(Parser.CurAttr.Value('enabled'),'false') then Begin
+        Log.Log('botloader','机器人 '''+bot_id+''' 已不可用。');
+        skipElement(parser);
+        exit;
+      end;
+      Log.Log('botloader','加载机器人 '''+bot_id+'''');
+      Log.OpenChatLog(bot_ID);
+      Memory.bot_ID:=bot_ID;
+      Memory.Load;
+      while (parser.scan) do
+        case Parser.CurPartType of
+          ptStartTag,
+          ptEmptyTag:begin
+                       if parser.CurName='property' then begin
+                         if PropertyElement then inc(numprops);
+                       end else
+                       if parser.CurName='learn' then
+                         LearnElement;
+                     end;
+          ptEndTag:if parser.curname='bot' then break;
+        end;
+      Log.log('botloader','共加载 '+inttostr(numprops)+ ' 个属性。');
+    end;
+  function TBotLoader.SentenceSplitters:boolean;
+    var
+      val:string;
+      count:integer;
+    begin
+      count:=0;
+      result:=true;
+      if parser.CurPartType=ptEmptyTag then exit;
+      while Parser.Scan do
+        case Parser.CurPartType of
+          ptStartTag,
+          ptEmptyTag:if parser.Curname='splitter' then begin
+                       val:=Parser.CurAttr.Value('value');
+                       if val<>'' then SentenceSplitterChars:=SentenceSplitterChars+val;
+                       inc(count);
+                     end;
+          ptEndTag:if parser.CurName='sentence-splitters' then break;
+        end;
+      Log.Log('botloader','共加载 '+inttostr(count)+' 个句子过滤。');
+    end;
+  function TBotLoader.InputSubstitutions:boolean;
+    var
+      _from,_to:string;
+      count:integer;
+    begin
+      count:=0;
+      result:=true;
+      if parser.CurPartType=ptEmptyTag then exit;
+      while Parser.Scan do
+        case Parser.CurPartType of
+          ptStartTag,
+          ptEmptyTag:if parser.Curname='substitute' then begin
+                       _from:=Parser.CurAttr.Value('find');
+                       _to:=Parser.CurAttr.Value('replace');
+                       Preprocessor.add(_from,_to);
+                       inc(count);
+                     end;
+          ptEndTag:if parser.CurName='input' then break;
+        end;
+      Log.Log('botloader','共加载 '+inttostr(count)+' 个输入替换。');
+    end;
+
+  procedure TBotLoader.load(filename:string);
+    begin
+      if loaded then Begin
+        Log.Log('botloader','已经加载了一个机器人。');
+        exit; {不能在同一时间加载两个机器人}
+      end;
+      Log.Log('botloader','加载 '+filename+'...');
+      parser:=TXmlParser.Create;
+      parser.Normalize:=true;
+      parser.LoadFromFile(filename);
+      parser.startscan;
+      while parser.Scan do
+        case parser.CurPartType of
+          ptStartTag:if parser.CurName='bot' then BotElement else
+                     if parser.CurName='sentence-splitters' then SentenceSplitters else
+                     if parser.CurName='input' then InputSubstitutions;
+        end;
+      parser.clear;
+      parser.free;
+      Log.Log('botloader','完成。');
+      Log.Log('botloader',inttostr(Nodecount));
+    end;
+
+end.
+
+--------------------------------------------------------------------------
+
+unit ULogging;
+
+interface
+uses classes;
+type
+  TLog=class
+    _Disabled:TStringList;
+    _LogCache:TStringList;
+    _ChatlogFile:System.Text;
+    _writechatlog:boolean;
+    constructor create;
+    procedure OpenChatLog(bot_id:string);
+    Procedure Disable(kind:string);
+    procedure Enable(kind:string);
+    Procedure Log(s:string);overload;
+    Procedure Log(kind:string;s:string);overload;
+    procedure Flush;
+    Procedure ChatLog(who,what:string);
+    destructor destroy;override;
+  end;
+var
+  Log:TLog;
+implementation
+uses UChat,SysUtils;
+  constructor TLog.create;
+    begin
+      inherited Create;
+      _LogCache:=TStringList.Create;
+      _Disabled:=TStringList.Create;
+      _Disabled.Duplicates:=dupIgnore;
+      _writechatlog:=false;
+    end;
+  destructor TLog.Destroy;
+    begin
+      _Disabled.Free;
+      _LogCache.Free;
+      if _writechatlog then
+        closefile(_chatlogfile);
+      inherited destroy;
+    end;
+  procedure TLog.OpenChatLog(bot_id:string);
+    begin
+      try
+        AssignFile(_ChatlogFile,bot_id+'.chatlog');
+        if FileExists(bot_id+'.chatlog') then
+          Append(_ChatLogFile)
+        else
+          rewrite(_ChatLogFile);
+        Writeln(_ChatLogFile);
+        Writeln(_ChatLogFile,DateTimeToStr(now));
+
+        _writechatlog:=true;
+        Log('log','聊天日志将被存储为文件 '+bot_id+'.chatlog');
+      except
+        _writechatlog:=false;
+        Log('log','无法写聊天日志文件，聊天日志功能将被禁用。');
+      end;
+    end;
+  procedure Tlog.Disable(kind:string);
+    begin
+      _Disabled.Add(kind);
+    end;
+  procedure Tlog.Enable(kind:string);
+    var
+      i:integer;
+    begin
+      i:=_Disabled.Indexof(kind);
+      if i>=0 then
+        _Disabled.Delete(i);
+    end;
+  procedure TLog.Flush;
+    var i:integer;
+    begin
+      if assigned(chat) then begin
+        for i:=0 to _LogCache.count-1 do
+          Chat.AddLogMessage(_LogCache.Strings[i]);
+        _LogCache.Clear;
+      end;
+    end;
+  Procedure TLog.Log(kind:string;s:string);
+    begin
+      if _Disabled.indexof(kind)=-1 then
+        Log(kind+': '+s)
+    end;
+  Procedure TLog.Log(s:string);
+    begin
+      if assigned(chat) then
+        Chat.AddLogMessage(s)
+      else
+        _LogCache.Add(s);
+    end;
+  Procedure TLog.ChatLog(who,what:string);
+    begin
+      if _writechatlog then
+        Writeln(_chatlogfile,Who,'> ',what);
+    end;
+end.
+
+-----------------------------------------------------------------------------
+unit UUtils;
+{general utility methods for parsing strings and TXMLParser elements}
+interface
+uses
+  classes,LibXMLParser;
+type
+  TStringTokenizer=class
+    _tokens:TStringList;
+    _count:integer;
+    _delim:string;
+    _string:string;
+    constructor Create(delimiter:String);
+    procedure SetDelimiter(delimiter:String);
+    procedure Tokenize(s:string);
+    function getFirst:string;
+    function getLast:string;
+    function get(i:integer):string;
+
+  end;
+
+  TSimpleSubstituter=class
+    _substFrom,
+    _substTo:TStringlist;
+    constructor create;
+    destructor destroy;override;
+    procedure add(_from,_to:string);
+    function process(s:string):string;
+  end;
+
+procedure WrFile(fname:string;s:string);
+procedure SkipElement(Name:string;Parser:TXMLParser);overload;
+procedure SkipElement(Parser:TXMLParser);overload;
+function  GetElementContents(Parser:TXMLParser):string;
+
+Var
+  SentenceSplitterChars:string;
+  Preprocessor:TSimpleSubstituter;
+implementation
+  Uses SysUtils;
+  procedure WrFile(fname:string;s:string);
+    var
+      t:System.text;
+    begin
+      assignfile(t,fname);
+      if FileExists(fname) then
+        append(t)
+      else
+        rewrite(t);
+      writeln(t,s);
+      flush(t);
+      closefile(t);
+    end;
+
+  procedure SkipElement(Parser:TXMLParser);
+    begin
+      SkipElement(parser.CurName,parser);
+    end;
+  procedure SkipElement(Name:string;Parser:TXMLParser);
+    var
+      nested:integer;
+    begin
+      with parser do begin
+        if (CurPartType=ptEmptyTag) and (CurName=name)then exit;
+        nested:=0;
+        while scan do
+          case curparttype of
+            ptstarttag:if CurName=name then inc(nested);
+            ptEndTag:if Curname=name then
+                       if nested=0 then break
+                       else dec(nested);
+          end;
+      end;
+  end;
+
+  function GetElementContents(Parser:TXMLParser):string;
+    begin
+      with parser do begin
+        if CurPartType<>ptContent then {??}
+          result:=CurContent
+        else begin
+          if CurStart[0] in CWhitespace then result:=' ' else result:='';
+          result:=result+CurContent;
+          {if CurFinal[0] in CWhitespace then result:=result +' ';}
+        end;
+      end;
+    end;
+
+  constructor TStringTokenizer.create(delimiter:string);
+    begin
+      _delim:=delimiter;
+      _Tokens:=TStringList.Create;
+      _tokens.sorted:=false;
+    end;
+  procedure TStringTokenizer.Tokenize(s:string);
+    var
+      i:integer;
+      thistoken:string;
+      spos,epos:integer;
+    begin
+      i:=1;
+      _string:=s;
+      if _delim='' then _delim:=' ';
+      _tokens.Clear;
+      while i<length(_string) do
+        begin
+          if ord(_string[i]) in [$81..$FF] then //GB 码
+            begin
+              _string:=copy(_string,1,i-1)+' '+copy(_string,i,2)+' '+copy(_string,i+2,length(_string)-i-1);
+              i:=i+2;
+            end;
+          inc(i);
+        end;
+      i:=1;
+      while i<= length(_string) do begin
+        while isDelimiter(_delim,_string,i) do inc(i);
+        if i>length(_string) then break;
+        spos:=i;
+        repeat inc(i);
+        until (isDelimiter(_delim,_string,i))or (i> length(_string));
+        epos:=i;
+        ThisToken:=copy(_string,spos,epos-spos);
+        _tokens.Add(ThisToken);
+      end;
+      _count:=_tokens.Count;
+    end;
+  procedure TStringTokenizer.SetDelimiter(delimiter:string);
+    begin
+      if delimiter<>_delim then begin
+        _delim:=delimiter;
+        Tokenize(_string);
+      end;
+    end;
+  function TStringTokenizer.getLast:string;
+    begin
+      if _Tokens.count>0 then
+        result:=_Tokens.Strings[_Tokens.count-1]
+      else
+        result:='';
+    end;
+  function TStringTokenizer.getFirst:string;
+    begin
+      if _Tokens.count>0 then
+        result:=_Tokens.Strings[0]
+      else
+        result:='';
+    end;
+  function TStringTokenizer.get(i:integer):string;
+    begin
+      if _Tokens.count>i then
+        result:=_Tokens.Strings[i]
+      else
+        result:='';
+    end;
+  constructor TSimpleSubstituter.create;
+    begin
+      inherited create;
+      _substFrom:=TStringList.create;
+      with _substFrom do begin
+        Duplicates:=dupIgnore;
+        Sorted:=false;
+      end;
+      _substTo:=TStringList.create;
+      with _substTo do begin
+        Duplicates:=dupIgnore;
+        Sorted:=false;
+      end;
+    end;
+
+  destructor TSimpleSubstituter.destroy;
+    begin
+      _substFrom.free;
+      _substTo.free;
+      inherited destroy;
+    end;
+
+  procedure TSimpleSubstituter.add(_from,_to:string);
+    begin
+      _substFrom.Add(_from);
+      _substTo.Add(_to);
+    end;
+  function TSimpleSubstituter.process(s:string):string;
+    var
+      i:integer;
+    begin
+      result:=s;
+      for i:=0 to _substFrom.Count-1 do
+        result:=StringReplace(result,_substFrom[i],_substTo[i],[rfReplaceAll, rfIgnoreCase]);
+    end;
+
+end.

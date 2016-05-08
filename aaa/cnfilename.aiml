@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="GB2312"?>
+<aiml>
+  <category>
+    <pattern> *  要 听 * </pattern>
+    <template>
+      <random>
+        <li>我也喜欢听。</li>
+        <li>你喜欢什么音乐？</li>
+        <li>ok~~~</li>
+        <li>听听音乐可以放松心情。</li>
+      </random>
+      来 听 <file><star index="2"/> </file>
+    </template>
+  </category>
+  
+    <category>
+    <pattern> *  想 听 * </pattern>
+    <template>
+      <random>
+        <li>我也喜欢听。</li>
+        <li>你喜欢什么音乐？</li>
+        <li>ok~~~</li>
+        <li>听听音乐可以放松心情。</li>
+      </random>
+      来 听<file> <star index="2"/> </file>
+    </template>
+  </category>
+  
+  <category>
+    <pattern> *  看 影 片 * </pattern>
+    <template>
+      <random>
+        <li>我喜欢看电影。</li>
+        <li>我喜欢喜剧。</li>
+        <li>ok~~~</li>
+        <li>如果播放有问题的话你需要检查你的播放器。</li>
+      </random>
+      <file> <star index="2"/> </file>
+    </template>
+  </category>  
+  
+  
+    <category>
+    <pattern> *  看 电 影 * </pattern>
+    <template>
+      <random>
+        <li>我喜欢看电影。</li>
+        <li>我喜欢喜剧。</li>
+        <li>ok~~~</li>
+        <li>如果播放有问题的话你需要检查你的播放器。</li>
+      </random>
+      <file> <star index="2"/> </file>
+    </template>
+  </category>  
+  
+  <category>
+    <pattern> 我 _  看 看 * </pattern>
+    <template>
+      <random>
+        <li>好的我来打开。</li>
+        <li>愿意为您效劳。</li>
+        <li>ok~~~</li>
+        <li>好的，我很高兴为您服务。</li>
+      </random>
+      <file> <star index="2"/> </file>
+    </template>
+  </category>  
+  
+      <category>
+    <pattern> 我 _  看 * </pattern>
+    <template>
+      <random>
+        <li>好的我来打开。</li>
+        <li>愿意为您效劳。</li>
+        <li>ok~~~</li>
+        <li>好的，我很高兴为您服务。</li>
+      </random>
+      <file> <star index="2"/> </file>
+    </template>
+  </category>  
+  
+        <category>
+    <pattern> 我 _  打开 * </pattern>
+    <template>
+      <random>
+        <li>好的我来打开。</li>
+        <li>愿意为您效劳。</li>
+        <li>ok~~~</li>
+        <li>好的，我很高兴为您服务。</li>
+      </random>
+      <file> <star index="2"/> </file>
+    </template>
+  </category>  
+
+
+</aiml>
